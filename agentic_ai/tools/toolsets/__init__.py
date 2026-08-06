@@ -1,5 +1,3 @@
-from .finance import finance_toolset
-from .weather import weather_toolset
-from .communication import communication_toolset
+from .slack import *
 
-__all__ = ["finance_toolset", "weather_toolset", "communication_toolset"]
+__all__ = ["slack_toolset"]

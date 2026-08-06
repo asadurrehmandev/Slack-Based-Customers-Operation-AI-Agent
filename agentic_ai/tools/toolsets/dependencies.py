@@ -1,23 +1,18 @@
 from dataclasses import dataclass
 
-from agentic_ai.providers.messenger.messenger import MessengerService, MessengerProviderFactory
-from agentic_ai.providers.weather.weather import WeatherService, MockWeatherProvider
+from configs import settings
+from integrations.slack.client import OPERATIONS_ASSISTANT
+from integrations.slack.services.messenger import SlackMessengerService
 
 
 @dataclass
 class ToolDependencies:
-    weather_service: WeatherService
-    messenger_service: MessengerService
+    slack_messenger: SlackMessengerService
 
 
 deps = ToolDependencies(
-    # Weather Service
-    weather_service=WeatherService(
-        provider=MockWeatherProvider()
-    ),
-
-    # Whatsapp/Telegram and Other Messaging Service
-    messenger_service=MessengerService(
-        factory=MessengerProviderFactory()
+    slack_messenger=SlackMessengerService(
+        client=OPERATIONS_ASSISTANT,
+        default_channel=settings.SLACK_CHANNEL_ID
     )
 )
