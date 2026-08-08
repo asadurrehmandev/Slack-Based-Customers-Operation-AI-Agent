@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  postgres-receptionist:
+    image: postgres:16
+    container_name: receptionist-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: dev_receptionist
+      POSTGRES_USER: asadurrehman
+      POSTGRES_PASSWORD: FQwFplfVNpwRpXrE
+    ports:
+      - "127.0.0.1:1000:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

@@ -35,7 +35,7 @@ async def check_available_slots(
             AvailableSlot(start_time=time(10, 30), end_time=time(11, 0)),
             AvailableSlot(start_time=time(14, 0), end_time=time(14, 30)),
         ],
-        date(2026, 8, 11): [
+        date(2026, 8, 8): [
             AvailableSlot(start_time=time(11, 0), end_time=time(11, 30)),
             AvailableSlot(start_time=time(13, 30), end_time=time(14, 0)),
             AvailableSlot(start_time=time(16, 0), end_time=time(16, 30)),

@@ -1,6 +1,6 @@
 from agentic_ai.agents.base import create_agent
 from agentic_ai.agents.prompt_builder import build_prompt
-from agentic_ai.model import NEMOTRON_3_ULTRA
+from agentic_ai.model.openrouter_free import OPENROUTER_FREE
 from agentic_ai.tools.toolsets.appointment import appointment_toolset
 from agentic_ai.tools.toolsets.utils import utils_toolset
 
@@ -13,7 +13,7 @@ SYSTEM_PROMPT = build_prompt(
 )
 
 receptionist_agent = create_agent(
-    model=NEMOTRON_3_ULTRA,
+    model=OPENROUTER_FREE,
     prompt=SYSTEM_PROMPT,
     toolsets=[
         appointment_toolset,
