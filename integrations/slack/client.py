@@ -1,6 +1,6 @@
 from slack_sdk.web.async_client import AsyncWebClient
 
-from configs import settings
+from core.configs import settings
 
 # FOR NAME EASE, WE CAN'T DEFINE AsyncWebClient AS A TYPE EVERYWHERE DUE TO NAME CONFUSION
 SlackBot = AsyncWebClient

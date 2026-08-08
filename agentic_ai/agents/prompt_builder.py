@@ -16,5 +16,5 @@ def load_prompt(
 
 
 def build_prompt(*files: str) -> str:
-    logger.info("Building prompt for the agent")
+    logger.debug("Building prompt for the agent")
     return "\n\n".join(load_prompt(f) for f in files)
