@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     SLACK_CHANNEL_ID: str
 
     model_config = SettingsConfigDict(
-        env_file=Path(__file__).parent / ".env",
+        env_file=Path(__file__).parent.parent / ".env",
         env_file_encoding="utf-8",
     )
 
@@ -30,11 +30,11 @@ class Settings(BaseSettings):
     @property
     def DATABASE_URI(self) -> str:
         return (
-            f"postgresql://{self.POSTGRES_USER}:"
-            f"{self.POSTGRES_PASSWORD}@"
-            f"{self.POSTGRES_HOST}:"
-            f"{self.POSTGRES_PORT}/"
-            f"{self.POSTGRES_DB}"
+            f"postgresql://{self.DATABASE_USER}:"
+            f"{self.DATABASE_PASSWORD}@"
+            f"{self.DATABASE_HOST}:"
+            f"{self.DATABASE_PORT}/"
+            f"{self.DATABASE_NAME}"
         )
 
 

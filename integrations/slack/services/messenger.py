@@ -2,7 +2,7 @@ from agentic_ai.tools.toolsets.slack.schema import SlackNotificationFromTool
 from core.logger import get_logger
 from integrations.slack.client import OPERATIONS_ASSISTANT, SlackBot
 from integrations.slack.renderer import SlackRenderer
-from integrations.slack.schema import SlackMessage, SLACK_TEMPLATE_MESSAGE
+from integrations.slack.schema import SLACK_TEMPLATE_MESSAGE
 
 logger = get_logger(__name__)
 
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
 
     async def main():
-        from configs import settings
+        from core.configs import settings
 
         slack_messenger = SlackMessengerService(
             client=OPERATIONS_ASSISTANT,

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from configs import settings
+from core.configs import settings
 from integrations.slack.client import OPERATIONS_ASSISTANT
 from integrations.slack.services.messenger import SlackMessengerService
 

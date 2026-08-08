@@ -16,7 +16,7 @@ def create_agent(
         deps_type: type | None = None,
 ) -> Agent:
 
-    logger.info(f"Creating agent with Model: {model}")
+    logger.debug(f"Creating agent with Model: {model}")
 
     kwargs = {
         "model": model,

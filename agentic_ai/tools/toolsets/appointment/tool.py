@@ -17,7 +17,7 @@ async def check_available_slots(
             Field(description="Date of the appointment")
         ]
 ) -> AvailableSlots:
-    logger.info("Calling check_available_slots tool with date: %s", appointment_date)
+    logger.debug("Calling check_available_slots tool with date: %s", appointment_date)
 
     """
     Find available appointment slots on the provided date.
