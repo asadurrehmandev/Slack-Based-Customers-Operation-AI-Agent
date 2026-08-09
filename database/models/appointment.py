@@ -11,7 +11,7 @@ from database.connection import DatabaseBase
 
 class AppointmentStatus(str, Enum):
     CONFIRMED = "confirmed"
-    CANCELLED = "cancelled"
+    FREE = "free"
 
 
 class CalendarSyncStatus(str, Enum):
@@ -32,12 +32,12 @@ class Appointment(DatabaseBase):
     # CUSTOMER INFO
     customer_name: Mapped[str] = mapped_column(
         String(150),
-        nullable=False,
+        nullable=True,
     )
 
     customer_email: Mapped[str] = mapped_column(
         String(255),
-        nullable=False,
+        nullable=True,
     )
 
     # APPOINTMENT INFO
@@ -55,7 +55,7 @@ class Appointment(DatabaseBase):
 
     appointment_status: Mapped[AppointmentStatus] = mapped_column(
         PGEnum(AppointmentStatus),
-        default=AppointmentStatus.CONFIRMED,
+        default=AppointmentStatus.FREE,
         nullable=False,
     )
 
