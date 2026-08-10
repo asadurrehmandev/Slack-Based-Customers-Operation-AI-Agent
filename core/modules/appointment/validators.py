@@ -4,33 +4,6 @@ from datetime import date, time, datetime
 class AppointmentValidator:
 
     @staticmethod
-    def validate_dates(
-            start_date: date,
-            end_date: date | None = None,
-    ) -> None:
-        """
-        Validate the appointment date range.
-
-        ``start_date`` is inclusive.
-
-        ``end_date`` is inclusive. If ``end_date`` is not provided,
-        only ``start_date`` is considered.
-
-        :raises ValueError:
-            If ``end_date`` is equal to or earlier than ``start_date``.
-        """
-
-        if start_date < date.today():
-            raise ValueError(
-                "start_date must not be in past."
-            )
-
-        if end_date is not None and end_date < start_date:
-            raise ValueError(
-                "end_date must be later than start_date."
-            )
-
-    @staticmethod
     def get_effective_date_time_range(
             start_date: date,
             end_date: date | None = None,
@@ -112,12 +85,13 @@ class AppointmentValidator:
 if __name__ == "__main__":
     from datetime import date, time, datetime
 
+
     def test_case(
-        name: str,
-        start_date: date,
-        end_date: date | None = None,
-        start_time: time | None = None,
-        end_time: time | None = None,
+            name: str,
+            start_date: date,
+            end_date: date | None = None,
+            start_time: time | None = None,
+            end_time: time | None = None,
     ):
         result = AppointmentValidator.get_effective_date_time_range(
             start_date=start_date,
@@ -134,6 +108,7 @@ if __name__ == "__main__":
         print(f"Start Time : {start_time}")
         print(f"End Time   : {end_time}")
         print(f"Result     : {result}")
+
 
     now = datetime.now()
 
