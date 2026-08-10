@@ -2,7 +2,7 @@ from pydantic_ai import RunContext
 
 from . import slack_toolset
 from .schema import SlackNotificationFromTool
-from ..dependencies import ToolDependencies
+from ..dependencies import ReceptionistDependencies
 from core.logger import get_logger
 
 logger = get_logger(__name__)
@@ -10,7 +10,7 @@ logger = get_logger(__name__)
 
 @slack_toolset.tool
 async def post_slack_message(
-        ctx: RunContext[ToolDependencies],
+        ctx: RunContext[ReceptionistDependencies],
         message: SlackNotificationFromTool,
 ):
 

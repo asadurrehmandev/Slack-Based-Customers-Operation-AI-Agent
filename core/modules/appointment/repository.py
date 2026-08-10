@@ -19,9 +19,9 @@ class AppointmentRepository:
             db: Session,
             start_date: date,
             end_date: date | None = None,
-            status: AppointmentStatusFilter = "all",
             start_time: time | None = None,
             end_time: time | None = None,
+            status: AppointmentStatusFilter = "all",
     ) -> list[Appointment]:
         """
         Get appointments from the database within the specified

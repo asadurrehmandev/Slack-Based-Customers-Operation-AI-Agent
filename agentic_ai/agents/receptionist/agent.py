@@ -2,6 +2,7 @@ from agentic_ai.agents.base import create_agent
 from agentic_ai.agents.prompt_builder import build_prompt
 from agentic_ai.model.openrouter_free import OPENROUTER_FREE
 from agentic_ai.tools.toolsets.appointment import appointment_toolset
+from agentic_ai.tools.toolsets.dependencies import ReceptionistDependencies
 from agentic_ai.tools.toolsets.utils import utils_toolset
 
 SYSTEM_PROMPT = build_prompt(
@@ -19,31 +20,44 @@ receptionist_agent = create_agent(
         appointment_toolset,
         utils_toolset,
     ],
+    deps_type=ReceptionistDependencies,
 )
 
 if __name__ == "__main__":
     import asyncio
 
+
     async def main():
         message_history = []
+
+        from database import get_db
 
         print("Receptionist Agent")
         print("Type 'exit' to quit.\n")
 
-        while True:
-            prompt = input("You: ").strip()
+        db = next(get_db())
 
-            if prompt.lower() in {"exit", "quit"}:
-                break
+        deps = ReceptionistDependencies(db=db)
 
-            result = await receptionist_agent.run(
-                prompt,
-                message_history=message_history,
-            )
+        try:
+            while True:
+                prompt = input("You: ").strip()
 
-            print(f"\nAssistant: {result.output}\n")
+                if prompt.lower() in {"exit", "quit"}:
+                    break
 
-            # Keep the conversation for the next turn
-            message_history = result.all_messages()
+                result = await receptionist_agent.run(
+                    prompt,
+                    deps=deps,
+                    message_history=message_history,
+                )
+
+                print(f"\nAssistant: {result.output}\n")
+
+                # Keep the conversation for the next turn
+                message_history = result.all_messages()
+        finally:
+            db.close()
+
 
     asyncio.run(main())

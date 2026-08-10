@@ -1,26 +1,35 @@
 from datetime import date, time
 from typing import Annotated, Optional
+from uuid import UUID
 
 from pydantic import BaseModel, Field
 
 
 class AvailableSlot(BaseModel):
+    slot_id: UUID = Field(
+        description="Unique identifier of the available appointment slot. "
+                    "Use this ID when booking the selected slot."
+    )
     start_time: time = Field(
         description="Start time of the available appointment slot."
     )
-
     end_time: time = Field(
         description="End time of the available appointment slot."
     )
 
 
-class AvailableSlots(BaseModel):
+class AvailableDate(BaseModel):
     appointment_date: date = Field(
-        description="The date these appointment slots are available."
+        description="Date on which the appointment slots are available."
+    )
+    slots: list[AvailableSlot] = Field(
+        description="Available appointment time slots for this date."
     )
 
-    slots: list[AvailableSlot] = Field(
-        description="List of all available appointment slots for the specified date."
+
+class AvailableAppointments(BaseModel):
+    appointments: list[AvailableDate] = Field(
+        description="Available appointment dates and their available time slots."
     )
 
 

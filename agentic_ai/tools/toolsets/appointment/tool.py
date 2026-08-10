@@ -1,58 +1,95 @@
-from datetime import date, time
-from typing import Annotated
+from datetime import date
+from typing import Annotated, Optional
 
 from pydantic import Field
+from pydantic_ai import RunContext
 
 from core.logger import get_logger
+from core.modules.appointment.service import AppointmentService
 from . import appointment_toolset
-from .schema import AvailableSlots, AvailableSlot
+from .schema import AvailableAppointments, AvailableSlot, AvailableDate
+from ..dependencies import ReceptionistDependencies
 
 logger = get_logger(__name__)
 
 
-@appointment_toolset.tool_plain
+@appointment_toolset.tool
 async def check_available_slots(
-        appointment_date: Annotated[
+        ctx: RunContext[ReceptionistDependencies],
+        start_date: Annotated[
             date,
-            Field(description="Date of the appointment")
+            Field(
+                description=(
+                        "The date from which to search for available appointments. "
+                        "This date is included in the search."
+                )
+            ),
+        ],
+        end_date: Annotated[
+            Optional[date],
+            Field(
+                description=(
+                        "Optional final date for the availability search. "
+                        "This date is included. If omitted, only start_date is searched."
+                )
+            ),
+        ] = None,
+) -> AvailableAppointments:
+    """
+        Find available appointment slots within the requested date range.
+
+        The search includes start_date and, when provided, end_date.
+        Past dates and past times are automatically excluded.
+
+        Args:
+            ctx:
+                Pydantic AI run context containing the AppointmentService.
+
+            start_date:
+                First date to check for available appointment slots.
+
+            end_date:
+                Optional final date to check. If omitted, only start_date
+                is searched.
+
+        Returns:
+            AvailableAppointments:
+                A list of dates containing their available appointment slots.
+                Returns an empty appointments list when no slots are available.
+        """
+
+    logger.debug(
+        "CHECKING AVAILABLE SLOTS | start_date=%s, end_date=%s",
+        start_date,
+        end_date,
+    )
+
+    appointments = AppointmentService.get_free_appointments(
+        db=ctx.deps.db,
+        start_date=start_date,
+        end_date=end_date,
+    )
+
+    available_dates: dict[date, list[AvailableSlot]] = {}
+
+    for appointment in appointments:
+        available_dates.setdefault(
+            appointment.appointment_date,
+            [],
+        ).append(
+            AvailableSlot(
+                slot_id=appointment.id,
+                start_time=appointment.start_time,
+                end_time=appointment.end_time,
+            )
+        )
+
+    return AvailableAppointments(
+        appointments=[
+            AvailableDate(
+                appointment_date=appointment_date,
+                slots=slots,
+            )
+            for appointment_date, slots in available_dates.items()
         ]
-) -> AvailableSlots:
-    logger.debug("Calling check_available_slots tool with date: %s", appointment_date)
-
-    """
-    Find available appointment slots on the provided date.
-
-    Args:
-        appointment_date: Lookup date of the appointment.
-
-    Returns:
-        List of available appointment slots on the provided date.
-    """
-
-    mock_slots = {
-        date(2026, 8, 10): [
-            AvailableSlot(start_time=time(9, 0), end_time=time(9, 30)),
-            AvailableSlot(start_time=time(10, 30), end_time=time(11, 0)),
-            AvailableSlot(start_time=time(14, 0), end_time=time(14, 30)),
-        ],
-        date(2026, 8, 8): [
-            AvailableSlot(start_time=time(11, 0), end_time=time(11, 30)),
-            AvailableSlot(start_time=time(13, 30), end_time=time(14, 0)),
-            AvailableSlot(start_time=time(16, 0), end_time=time(16, 30)),
-        ],
-        date(2026, 8, 12): [
-            AvailableSlot(start_time=time(9, 30), end_time=time(10, 0)),
-            AvailableSlot(start_time=time(12, 0), end_time=time(12, 30)),
-            AvailableSlot(start_time=time(15, 30), end_time=time(16, 0)),
-        ],
-        date(2026, 8, 13): [
-            AvailableSlot(start_time=time(10, 0), end_time=time(10, 30)),
-            AvailableSlot(start_time=time(13, 0), end_time=time(13, 30)),
-            AvailableSlot(start_time=time(15, 0), end_time=time(15, 30)),
-        ],
-    }
-
-    return AvailableSlots(
-        appointment_date=appointment_date,
-        slots=mock_slots.get(appointment_date, []),
     )

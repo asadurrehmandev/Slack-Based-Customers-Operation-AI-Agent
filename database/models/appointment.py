@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 
 from sqlalchemy import DateTime, Enum as PGEnum, String
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database.connection import DatabaseBase
 
@@ -12,12 +12,6 @@ from database.connection import DatabaseBase
 class AppointmentStatus(str, Enum):
     CONFIRMED = "confirmed"
     FREE = "free"
-
-
-class CalendarSyncStatus(str, Enum):
-    PENDING = "pending"
-    SYNCED = "synced"
-    FAILED = "failed"
 
 
 class Appointment(DatabaseBase):
@@ -59,20 +53,14 @@ class Appointment(DatabaseBase):
         nullable=False,
     )
 
-    # CALENDAR SYNC INFO
-    calendar_event_id: Mapped[str | None] = mapped_column(
-        String(255),
-        nullable=True,
-    )
-
-    calendar_sync_status: Mapped[CalendarSyncStatus] = mapped_column(
-        PGEnum(CalendarSyncStatus),
-        default=CalendarSyncStatus.PENDING,
-        nullable=False,
-    )
-
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         default=datetime.utcnow,
         nullable=False,
+    )
+
+    calendar_sync_job: Mapped["CalenderSyncJob | None"] = relationship(
+        back_populates="appointment",
+        uselist=False,
+        cascade="all, delete-orphan",
     )
