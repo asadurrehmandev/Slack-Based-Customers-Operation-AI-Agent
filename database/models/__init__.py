@@ -1,4 +1,4 @@
 from .appointment import Appointment
-from .calender_sync_job import CalenderSyncJob
+from .calendar_sync_job import CalendarSyncJob
 
-__all__ = ["Appointment", "CalenderSyncJob"]
+__all__ = ["Appointment", "CalendarSyncJob"]

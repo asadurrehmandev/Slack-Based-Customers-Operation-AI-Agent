@@ -59,8 +59,19 @@ class Appointment(DatabaseBase):
         nullable=False,
     )
 
-    calendar_sync_job: Mapped["CalenderSyncJob | None"] = relationship(
+    calendar_sync_job: Mapped["CalendarSyncJob | None"] = relationship(
         back_populates="appointment",
         uselist=False,
         cascade="all, delete-orphan",
     )
+
+    def __repr__(self):
+        return (
+            f"<Appointment("
+            f"id={self.id}, "
+            f"date={self.appointment_date}, "
+            f"start={self.start_time}, "
+            f"end={self.end_time}, "
+            f"status={self.appointment_status}"
+            f")>"
+        )

@@ -1,6 +1,6 @@
 from agentic_ai.agents.base import create_agent
 from agentic_ai.agents.prompt_builder import build_prompt
-from agentic_ai.model.openrouter_free import OPENROUTER_FREE
+from agentic_ai.model.deep_seek import DEEPSEEK_v4_FLASH
 from agentic_ai.tools.toolsets.appointment import appointment_toolset
 from agentic_ai.tools.toolsets.dependencies import ReceptionistDependencies
 from agentic_ai.tools.toolsets.utils import utils_toolset
@@ -14,7 +14,7 @@ SYSTEM_PROMPT = build_prompt(
 )
 
 receptionist_agent = create_agent(
-    model=OPENROUTER_FREE,
+    model=DEEPSEEK_v4_FLASH,
     prompt=SYSTEM_PROMPT,
     toolsets=[
         appointment_toolset,

@@ -3,11 +3,9 @@ from pydantic_ai.providers.openrouter import OpenRouterProvider
 
 from core.configs import settings
 
-OPENROUTER_FREE = OpenRouterModel(
-    model_name="openrouter/free",
+DEEPSEEK_v4_FLASH = OpenRouterModel(
+    model_name="~deepseek/deepseek-v4-flash-latest",
     provider=OpenRouterProvider(
         api_key=settings.LLM_API_KEY,
-        app_url="http://localhost:8000",
-        app_title="AI Receptionist Dev"
     )
 )

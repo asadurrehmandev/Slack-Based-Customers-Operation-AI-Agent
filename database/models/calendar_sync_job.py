@@ -9,13 +9,13 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database import DatabaseBase
 
 
-class CalendarSyncStatus(str, Enum):
+class Calendarsyncstatus(str, Enum):
     PENDING = "pending"
     SYNCED = "synced"
     FAILED = "failed"
 
 
-class CalenderSyncJob(DatabaseBase):
+class CalendarSyncJob(DatabaseBase):
     __tablename__ = "calender_sync_job"
 
     id: Mapped[UUID] = mapped_column(
@@ -35,9 +35,9 @@ class CalenderSyncJob(DatabaseBase):
         nullable=True,
     )
 
-    status: Mapped[CalendarSyncStatus] = mapped_column(
-        PGEnum(CalendarSyncStatus),
-        default=CalendarSyncStatus.PENDING,
+    status: Mapped[Calendarsyncstatus] = mapped_column(
+        PGEnum(Calendarsyncstatus),
+        default=Calendarsyncstatus.PENDING,
         nullable=False,
     )
 

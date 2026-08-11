@@ -12,7 +12,7 @@ def initialize_database():
     logger.info("INITIALIZING DATABASE")
 
     # Import models so SQLAlchemy registers them
-    from database.models import Appointment, CalenderSyncJob
+    from database.models import Appointment, CalendarSyncJob
 
     DatabaseBase.metadata.create_all(bind=engine)
 
